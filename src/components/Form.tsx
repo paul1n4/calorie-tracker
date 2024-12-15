@@ -6,7 +6,8 @@ import { ActivityActions, ActivityState } from "../reducers/activity-reducer"
 
 type FormProps = {
   dispatch: Dispatch<ActivityActions>,
-  state: ActivityState
+  state: ActivityState,
+  scrollToActivity: (activityId: string) => void
 }
 
 const initialState : Activity ={
@@ -16,7 +17,7 @@ const initialState : Activity ={
   calories: 0
 }
 
-export default function Form({dispatch, state}: FormProps) {
+export default function Form({dispatch, state, scrollToActivity}: FormProps) {
 
   const [activity, setActivity] = useState<Activity>(initialState)
 
@@ -46,11 +47,16 @@ export default function Form({dispatch, state}: FormProps) {
     e.preventDefault()
     
     dispatch({ type: 'save-activity', payload: {newActivity: activity}})
-
+    
     setActivity({
       ...initialState,
       id: uuidv4()
     })
+
+    // Delay the scroll action to allow DOM updates
+    setTimeout(() => {
+      scrollToActivity(activity.id);
+    }, 0);
   }
 
 

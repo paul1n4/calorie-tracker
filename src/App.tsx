@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useMemo } from "react"
+import { useReducer, useEffect, useMemo, useRef } from "react"
 import Form from "./components/Form"
 import { activityReducer, initialState } from "./reducers/activity-reducer"
 import ActivityList from "./components/ActivityList";
@@ -7,12 +7,28 @@ import CalorieTracker from "./components/CalorieTracker";
 function App() {
 
   const[state, dispatch] = useReducer(activityReducer, initialState)
+  const formRef = useRef<HTMLDivElement>(null)
+  const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
+
 
   useEffect(() => {
     localStorage.setItem('activities', JSON.stringify(state.activities))
   }, [state.activities])
 
   const canRestartApp = () => useMemo(() => state.activities.length, [state.activities])
+
+  const scrollToForm = () => {
+    if(formRef.current){
+      formRef.current.scrollIntoView({ behavior: "smooth"})
+    }
+  }
+
+  const scrollToActivity = (activityId: string) => {
+    const targetRef = activityRefs.current[activityId]
+    if (targetRef) {
+      targetRef.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+  }
   
   return (
     <> 
@@ -33,10 +49,11 @@ function App() {
       </header>
 
       <section className="bg-lime-500 py-20 px-5 ">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto" ref={formRef}>
           <Form
             dispatch={dispatch}
             state={state}
+            scrollToActivity={scrollToActivity}
           />
         </div>
       </section>
@@ -53,6 +70,8 @@ function App() {
         <ActivityList
           activities={state.activities}
           dispatch={dispatch}
+          scrollToForm={scrollToForm}
+          activityRefs={activityRefs}
         />
       </section>
     </>
