@@ -12,8 +12,8 @@ type FormProps = {
 const initialState : Activity ={
   id: uuidv4(),
   category: 1,
-    activityName: '',
-    calories: 0
+  activityName: '',
+  calories: 0
 }
 
 export default function Form({dispatch, state}: FormProps) {
@@ -25,14 +25,14 @@ export default function Form({dispatch, state}: FormProps) {
       const selectedActivity = state.activities.filter( stateActivity => stateActivity.id === state.activeId)[0]
       setActivity(selectedActivity)
     }
-  }, [state.activeId])
+  }, [state.activeId, state.activities])
   
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>) => {
     const isNumberField = ['category', 'calories'].includes(e.target.id)    
     setActivity({
       ...activity,
-      [e.target.id]: isNumberField ? + e.target.value : e.target.value
+      [e.target.id]: isNumberField ? +e.target.value : e.target.value
     })
   }
 

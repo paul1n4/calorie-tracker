@@ -54,8 +54,8 @@ export default function ActivityList({activities, dispatch} : ActivityListProps)
               </button>
             </div>
           </div>
-        ))}
-
+        ))
+      }
     </>
   )
 }

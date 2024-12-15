@@ -6,8 +6,6 @@ export type ActivityActions =
   {type: 'delete-activity', payload: { id: Activity['id']}} |
   {type: 'restart-app'} 
   
-  
-
 export type ActivityState = {
   activities: Activity[],
   activeId: Activity['id']
@@ -29,6 +27,7 @@ export const activityReducer = (
   ) => {
 
   if(action.type === 'save-activity'){
+    // Este código maneja la lógica para actualizar el state
     let updatedActivities : Activity[] = []
     if(state.activeId){
       updatedActivities = state.activities.map( activity => activity.id === state.activeId ? action.payload.newActivity : activity)
